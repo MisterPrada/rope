@@ -1,0 +1,33 @@
+{
+  "name": "rope",
+  "author": "Mister&Prada",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "staging": "vite --mode staging",
+    "production": "vite --mode production",
+    "build": "vite build",
+    "build-dev": "vite build --mode development",
+    "build-obfuscate": "node encoder.js && vite build && node cleaner.js",
+    "postinstall": "patch-package"
+  },
+  "devDependencies": {
+    "@dimforge/rapier3d": "^0.14.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "gsap": "^3.12.5",
+    "lil-gui": "^0.19.2",
+    "min-signal": "^1.0.2",
+    "normalize-wheel": "^1.0.1",
+    "patch-package": "^8.0.0",
+    "postprocessing": "^6.36.5",
+    "simplex-noise": "^4.0.1",
+    "stats.js": "^0.17.0",
+    "three": "^0.172.0",
+    "vite": "^4.3.1",
+    "vite-plugin-glsl": "^1.2.1",
+    "vite-plugin-terminal": "^1.2.0",
+    "vite-plugin-wasm": "^3.4.1"
+  }
+}
