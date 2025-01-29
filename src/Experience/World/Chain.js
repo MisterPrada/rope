@@ -32,12 +32,11 @@ export default class Chain extends Model {
         const gravity = { x: 0, y: -9.8, z: 0 };
         const world = this.world = new RAPIER.World(gravity);
 
-        // Создание материалов
+        // Create materials
         const ropeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const objectMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
 
-        // Создаём звенья верёвки
+        // Create chain for the rope
         const ropeSegments = this.ropeSegments = [];
         const segmentCount = 10;
         const segmentHeight = 0.5;
@@ -49,8 +48,8 @@ export default class Chain extends Model {
             mesh.position.y = -i * segmentHeight;
             this.scene.add(mesh);
 
-            if ( i === 0) {
-                // Создаём физические тела для Rapier
+            if ( i === 0) { // first object need fixed for correct working other chains
+                // Create physical body for Rapier
                 const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed()
                     .setTranslation(0, -i * segmentHeight, 0)
                     // .setLinearDamping(0.5)
@@ -62,7 +61,7 @@ export default class Chain extends Model {
 
                 ropeSegments.push({ mesh, rigidBody });
             } else {
-                // Создаём физические тела для Rapier
+                // Create physical body for Rapier
                 const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
                     .setTranslation(0, -i * segmentHeight, 0)
                     .setLinearDamping(3.4)
@@ -78,21 +77,21 @@ export default class Chain extends Model {
             }
         }
 
-        // Создание соединений
+        // Create connections
         for (let i = 0; i < ropeSegments.length - 1; i++) {
             const rbA = ropeSegments[i].rigidBody;
             const rbB = ropeSegments[i + 1].rigidBody;
 
-            // -segmentHeight, segmentHeight ниже это будут локальные координаты
+            // -segmentHeight, segmentHeight below are local coordinates
             const jointData = RAPIER.JointData.spherical(
-                { x: 0, y: -segmentHeight / 2, z: 0 }, // Анкер на первом звене
-                { x: 0, y: segmentHeight / 2, z: 0 }  // Анкер на втором звене
+                { x: 0, y: -segmentHeight / 2, z: 0 }, // Anchor on the first chain
+                { x: 0, y: segmentHeight / 2, z: 0 }  // Anchor on the second chain
             );
 
             world.createImpulseJoint(jointData, rbA, rbB, true);
         }
 
-        // Создание объекта и подвеска к последнему звену
+        // Create object and attach it to the last segment
         const objectGeometry = new THREE.BoxGeometry(1, 1, 1);
         const objectMesh = this.objectMesh = new THREE.Mesh(objectGeometry, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
         objectMesh.position.y = -(segmentCount * segmentHeight + 0.5);
@@ -120,19 +119,19 @@ export default class Chain extends Model {
         world.createImpulseJoint(objectJointData, lastSegmentBody, objectRigidBody, true);
 
 
-        // Создание искусственного толчка
+        // Create fake impulse
         // const impulse = { x: 2, y: 0, z: 0 };
-        // // Применяем импульс к телу
+        // Apply impulse to the object
         // objectRigidBody.applyImpulse(impulse, true);
 
 
-        // Создать красную сферу
+        // Create red sphere
         const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
         const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xfea0d0 });
         const sphereMesh = this.sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
         //this.scene.add( sphereMesh );
 
-        // Создаём физическое тело для Rapier
+        // Create physical body for Rapier
         const sphereRigidBodyDesc = RAPIER.RigidBodyDesc.fixed()
             .setTranslation(0, 0, 0)
             .setLinearDamping(0.0)
@@ -147,10 +146,8 @@ export default class Chain extends Model {
         world.createCollider(sphereColliderDesc, sphereRigidBody);
 
 
-
-
-        // Свой рендер для мира, т.к. в Updater он вызывается слишком часто, что приводит к
-        // медленной работе на устройствах с низкой производительностью
+        // Self render for world, because in Updater it is called too often, which leads to
+        // slow work on low-performance
         setInterval(() => {
             // Шаг симуляции Rapier
             this.world.step();
@@ -172,9 +169,7 @@ export default class Chain extends Model {
         this.sphereMesh.position.copy( this.input.cursor3D )
         this.sphereRigidBody.setTranslation({ x: this.input.cursor3D.x, y: this.input.cursor3D.y, z: this.input.cursor3D.z }, true);
 
-
-
-        // Синхронизация объектов Three.js с физическими телами Rapier
+        // Sync Three.js objects with Rapier physical bodies
         this.ropeSegments.forEach(({ mesh, rigidBody }) => {
             const translation = rigidBody.translation();
             const rotation = rigidBody.rotation();

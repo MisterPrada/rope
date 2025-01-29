@@ -18,16 +18,16 @@ export default class Camera
         this.lerpVector = new THREE.Vector3();
 
         this.setInstance()
-        this.setControls()
+        //this.setControls()
     }
 
     setInstance()
     {
         this.instance = new THREE.PerspectiveCamera(25, this.sizes.width / this.sizes.height, 0.1, 300)
-        this.defaultCameraPosition = new THREE.Vector3(-0.5, 1.5, 30);
+        this.defaultCameraPosition = new THREE.Vector3(-0.5, -7.5, 30);
 
         this.instance.position.copy(this.defaultCameraPosition)
-        this.instance.lookAt(new THREE.Vector3(0, 0, 0));
+        //this.instance.lookAt(new THREE.Vector3(0, 0, 0));
 
         this.lerpVector.copy(this.instance.position);
 
@@ -61,9 +61,9 @@ export default class Camera
 
     update()
     {
-        this.controls.update()
+        //this.controls.update()
 
-        //this.instance.updateMatrixWorld() // To be used in projection
+        this.instance.updateMatrixWorld() // To be used in projection
     }
 
     animateCameraPosition() {
