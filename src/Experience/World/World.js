@@ -8,6 +8,7 @@ import Time from "../Utils/Time.js";
 import EventEmitter from '@experience/Utils/EventEmitter.js';
 
 import Chain from "./Chain.js"
+import FireFlies from "./FireFlies.js"
 
 export default class World extends EventEmitter{
     constructor() {
@@ -58,6 +59,7 @@ export default class World extends EventEmitter{
         // Setup
         //this.cube = new ExampleClass()
         this.chain = new Chain()
+        this.fireFlies = new FireFlies()
         this.environment = new Environment()
 
         // Add debug helpers
@@ -106,14 +108,16 @@ export default class World extends EventEmitter{
     }
 
     resize() {
-        this.state.resize()
+        this.state?.resize()
         this.chain?.resize()
+        this.fireFlies?.resize()
     }
 
     update( deltaTime ) {
         this.debugHelpers?.update( deltaTime )
         this.cube?.update( deltaTime )
         this.chain?.update( deltaTime )
+        this.fireFlies?.update( deltaTime )
     }
 
     postUpdate( deltaTime ) {

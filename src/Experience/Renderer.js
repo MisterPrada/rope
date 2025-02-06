@@ -27,7 +27,7 @@ export default class Renderer {
         this.instance = new THREE.WebGLRenderer( {
             canvas: this.canvas,
             powerPreference: "high-performance",
-            antialias: false,
+            antialias: true,
             alpha: false,
             stencil: false,
             depth: true,
@@ -45,6 +45,8 @@ export default class Renderer {
 
         this.instance.setClearColor( this.clearColor, 1 )
         this.instance.setSize( this.sizes.width, this.sizes.height )
+
+        this.instance.toneMapping = THREE.NeutralToneMapping
     }
 
     setDebug() {

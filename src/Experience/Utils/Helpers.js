@@ -2,19 +2,19 @@ import * as THREE from 'three'
 
 // get position from min Y three attribute position array
 export function getMinPositionY( positions ) {
-    let minPosition = new THREE.Vector3(positions[0], positions[1], positions[2]);
+    let minPosition = new THREE.Vector3( positions[ 0 ], positions[ 1 ], positions[ 2 ] );
 
     let minY = Number.MAX_VALUE;
 
-    for (let i = 0; i < positions.length / 3; i++) {
+    for ( let i = 0; i < positions.length / 3; i++ ) {
 
-        if (positions[3 * i + 1] < minY) {
-            minY = positions[3 * i + 1];
+        if ( positions[ 3 * i + 1 ] < minY ) {
+            minY = positions[ 3 * i + 1 ];
 
             minPosition.set(
-                positions[3 * i + 0],
-                positions[3 * i + 1],
-                positions[3 * i + 2]
+                positions[ 3 * i + 0 ],
+                positions[ 3 * i + 1 ],
+                positions[ 3 * i + 2 ]
             );
         }
     }
@@ -26,10 +26,10 @@ export function getMinPositionY( positions ) {
 export function getCentroid( positions ) {
     let centroid = new THREE.Vector3();
 
-    for (let i = 0; i < positions.length / 3; i++) {
-        centroid.x += positions[3 * i + 0];
-        centroid.y += positions[3 * i + 1];
-        centroid.z += positions[3 * i + 2];
+    for ( let i = 0; i < positions.length / 3; i++ ) {
+        centroid.x += positions[ 3 * i + 0 ];
+        centroid.y += positions[ 3 * i + 1 ];
+        centroid.z += positions[ 3 * i + 2 ];
     }
 
     centroid.x /= positions.length / 3;
@@ -180,4 +180,51 @@ export function getTransitionTextureResolution( texture, sizes ) {
     }
 
     //this.postProcess.clearPass.uniforms.u_TransitionTextureResolution.value.set( texture.image.width, texture.image.height, a1, a2 );
+}
+
+export function cloneGltf( gltf ) {
+    const clone = {
+        animations: gltf.animations,
+        scene: gltf.scene.clone( true )
+    };
+
+    const skinnedMeshes = {};
+
+    gltf.scene.traverse( node => {
+        if ( node.isSkinnedMesh ) {
+            skinnedMeshes[ node.name ] = node;
+        }
+    } );
+
+    const cloneBones = {};
+    const cloneSkinnedMeshes = {};
+
+    clone.scene.traverse( node => {
+        if ( node.isBone ) {
+            cloneBones[ node.name ] = node;
+        }
+
+        if ( node.isSkinnedMesh ) {
+            cloneSkinnedMeshes[ node.name ] = node;
+        }
+    } );
+
+    for ( let name in skinnedMeshes ) {
+        const skinnedMesh = skinnedMeshes[ name ];
+        const skeleton = skinnedMesh.skeleton;
+        const cloneSkinnedMesh = cloneSkinnedMeshes[ name ];
+
+        const orderedCloneBones = [];
+
+        for ( let i = 0; i < skeleton.bones.length; ++i ) {
+            const cloneBone = cloneBones[ skeleton.bones[ i ].name ];
+            orderedCloneBones.push( cloneBone );
+        }
+
+        cloneSkinnedMesh.bind(
+            new Skeleton( orderedCloneBones, skeleton.boneInverses ),
+            cloneSkinnedMesh.matrixWorld );
+    }
+
+    return clone;
 }

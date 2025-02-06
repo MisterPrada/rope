@@ -26,7 +26,7 @@ export default class Input {
         } )
 
         this.cursor = { x: 0, y: 0, side: 'left'}
-        this.cursor3D = new THREE.Vector3()
+        this.cursor3D = new THREE.Vector3(-10000, 0, 0)
         this.cursorDirection = new THREE.Vector3()
         this.clientX = 0
         this.clientY = 0

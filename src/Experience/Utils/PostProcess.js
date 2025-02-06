@@ -243,7 +243,7 @@ export default class PostProcess {
     bloomRender() {
         if ( this.unrealBloomPass.enabled ) {
             //this.scene.traverse( this.materials._darkenNonBloomed )
-            this.bloomComposer.render()
+            //this.bloomComposer.render()
             //this.scene.traverse( this.materials._restoreMaterial )
         }
 
@@ -251,7 +251,7 @@ export default class PostProcess {
 
     productionRender() {
         if ( this.state.postprocessing ) {
-            this.bloomRender()
+            //this.bloomRender()
 
             this.composer.render()
         } else {
@@ -261,7 +261,7 @@ export default class PostProcess {
 
     debugRender() {
         if ( this.state.postprocessing ) {
-            this.bloomRender()
+            //this.bloomRender()
 
             this.renderer.autoClear = false
             this.composer.render()

@@ -10,6 +10,16 @@ export default [
     //     path: '/models/predator.glb'
     // },
     {
+        name: 'lightBulbModel',
+        type: 'gltfModel',
+        path: '/models/lightbulb/lightbulb_01_1k.gltf'
+    },
+    {
+        name: 'chainModel',
+        type: 'gltfModel',
+        path: '/models/chain.glb'
+    },
+    {
         name: 'displacementTexture',
         type: 'texture',
         path: '/textures/displacement.jpg'
