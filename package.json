@@ -10,8 +10,7 @@
     "production": "vite --mode production",
     "build": "vite build",
     "build-dev": "vite build --mode development",
-    "build-obfuscate": "node encoder.js && vite build && node cleaner.js",
-    "postinstall": "patch-package"
+    "build-obfuscate": "node encoder.js && vite build && node cleaner.js"
   },
   "devDependencies": {
     "@dimforge/rapier3d": "^0.14.0",
