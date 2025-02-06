@@ -1,7 +1,6 @@
 import glsl from 'vite-plugin-glsl'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import path from 'path'
-import Terminal from 'vite-plugin-terminal'
 import wasm from 'vite-plugin-wasm';
 
 const dirname = path.resolve()

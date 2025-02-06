@@ -11,9 +11,7 @@ import Input from "@experience/Utils/Input.js";
 //import RAPIER from '@dimforge/rapier3d';
 
 
-import('@dimforge/rapier3d').then(RAPIER => {
-    window.RAPIER = RAPIER
-})
+
 
 export default class Chain extends Model {
     experience = Experience.getInstance()
@@ -33,9 +31,13 @@ export default class Chain extends Model {
     constructor() {
         super()
 
-        this.setModel()
-        this.setListeners()
-        this.setDebug()
+        import('@dimforge/rapier3d').then(RAPIER => {
+            window.RAPIER = RAPIER
+
+            this.setModel()
+            this.setListeners()
+            this.setDebug()
+        })
     }
 
     setModel() {
@@ -294,6 +296,7 @@ export default class Chain extends Model {
 
     update( deltaTime ) {
 
+        if ( !window.RAPIER ) return
 
         this.sphereMesh.position.copy( this.input.cursor3D )
         this.sphereRigidBody.setTranslation({ x: this.input.cursor3D.x, y: this.input.cursor3D.y, z: this.input.cursor3D.z }, true);
