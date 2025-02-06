@@ -16,7 +16,7 @@ export default class State {
 
     unrealBloom = {
         enabled: true,
-        strength: 0.959,
+        strength: 1.2,
         radius: 1.9,
         threshold: 0.362,
     }
