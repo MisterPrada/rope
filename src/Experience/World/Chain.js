@@ -31,12 +31,15 @@ export default class Chain extends Model {
     constructor() {
         super()
 
-        import('@dimforge/rapier3d').then(RAPIER => {
-            window.RAPIER = RAPIER
+        import('@dimforge/rapier3d-compat').then(RAPIER => {
 
-            this.setModel()
-            this.setListeners()
-            this.setDebug()
+            RAPIER.init().then(() => {
+                window.RAPIER = RAPIER;
+                this.setModel()
+                this.setListeners()
+                this.setDebug()
+            })
+
         })
     }
 
