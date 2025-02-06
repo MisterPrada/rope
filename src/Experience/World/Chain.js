@@ -8,7 +8,12 @@ import Materials from "../Materials/Materials.js";
 import * as Helpers from '@experience/Utils/Helpers.js';
 
 import Input from "@experience/Utils/Input.js";
-import RAPIER from '@dimforge/rapier3d';
+//import RAPIER from '@dimforge/rapier3d';
+
+
+import('@dimforge/rapier3d').then(RAPIER => {
+    window.RAPIER = RAPIER
+})
 
 export default class Chain extends Model {
     experience = Experience.getInstance()
